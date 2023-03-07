@@ -10,24 +10,12 @@ type bpmProps = {
 export default function Sound({ bpm }: bpmProps) {
   const [tick, setTick] = useState<HTMLAudioElement>();
   const [tock, setTock] = useState<HTMLAudioElement>();
-  const [beat, setBeat] = useState(1);
 
   const metronomeSoundHandler = () => {
-    if (beat === 1) {
-      tick && tick.play();
-    } else {
-      tock && tock.play();
-    }
-
-    setBeat((prevBeat) => {
-      if (prevBeat === 4) {
-        return 1;
-      }
-      return prevBeat + 1;
-    });
+    tick && tick.play();
   };
 
-  // 초기 렌더링 당시에 tick 에 tickSound 설정해주기.
+  // 초기 렌더링 당시에 메트로놈 사운드 설정해주기.
 
   useEffect(() => {
     setTick(new Audio(tickSound));

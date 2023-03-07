@@ -36,7 +36,7 @@ export default function Metronome() {
         onChange={metronomeLoudnessHandler}
         onBlur={metronomeInputBlurHandler}
       />
-      <p>현재 숫자 : {Number.isNaN(bpm) ? "" : bpm}</p>
+      <p>현재 bpm : {Number.isNaN(bpm) ? "" : bpm}</p>
       <Sound bpm={bpm} />
     </>
   );
