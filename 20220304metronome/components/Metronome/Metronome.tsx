@@ -56,8 +56,11 @@ export default function Metronome() {
     if ((inputRef.current && isNaN(num)) || (inputRef.current && num > 200)) {
       inputRef.current.blur();
     }
-    console.log("현재 숫자 : ", number);
   };
+
+  useEffect(() => {
+    console.log("현재 숫자 : ", number);
+  }, [number]);
 
   return (
     <>
