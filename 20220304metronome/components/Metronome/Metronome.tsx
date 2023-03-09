@@ -5,9 +5,9 @@ import tickSound from "../../public/sounds/tick1.wav";
 import tockSound from "../../public/sounds/tick2.wav";
 
 export default function Metronome() {
-  const [bpm, setBpm] = useState(60);
+  const [number, setNumber] = useState(60);
   const [playing, setPlaying] = useState(false);
-  const inputRef = useRef(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const [tick, setTick] = useState<HTMLAudioElement>();
   const [tock, setTock] = useState<HTMLAudioElement>();
 
@@ -24,30 +24,39 @@ export default function Metronome() {
 
   const metronomeInputBlurHandler = () => {
     // 메트로놈 최소값이 1보다 작으면 1로 설정
-    if (bpm < 1) {
-      setBpm(1);
+    if (number < 1) {
+      setNumber(1);
       // 메트로놈 최댓값을 200으로 설정
-    } else if (bpm > 200) {
-      setBpm(200);
+    } else if (number > 200) {
+      setNumber(200);
     }
-    if (Number.isNaN(bpm)) {
-      setBpm(1);
+    if (Number.isNaN(number)) {
+      setNumber(1);
     }
   };
 
   // bpm 소리가 반복되도록 하기
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      metronomeSoundHandler();
-    }, (60 / bpm) * 1000);
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     metronomeSoundHandler();
+  //   }, (60 / bpm) * 1000);
 
-    return () => clearInterval(interval);
-  }, [bpm, metronomeSoundHandler]);
+  //   return () => clearInterval(interval);
+  // }, [bpm, metronomeSoundHandler]);
 
-  const metronomeLoudnessHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const numberHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const num = parseInt(e.target.value);
-    setBpm(num);
+    setNumber(num);
+    if (isNaN(num)) {
+      setNumber(1);
+    } else if (num > 200) {
+      setNumber(200);
+    }
+    if ((inputRef.current && isNaN(num)) || (inputRef.current && num > 200)) {
+      inputRef.current.blur();
+    }
+    console.log("현재 숫자 : ", number);
   };
 
   return (
@@ -58,12 +67,11 @@ export default function Metronome() {
         min={1}
         max={200}
         step={1}
-        value={bpm}
-        onChange={metronomeLoudnessHandler}
+        value={number}
+        onChange={numberHandler}
         onBlur={metronomeInputBlurHandler}
       />
-      <p>현재 bpm : {Number.isNaN(bpm) ? "" : bpm}</p>
-      <button onClick={metronomeSoundHandler}>Play</button>
+      <p>현재 숫자 : {Number.isNaN(number) ? "" : number}</p>
     </>
   );
 }
