@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useCallback } from "react";
 
 import tickSound from "../../public/sounds/tick1.wav";
 import tockSound from "../../public/sounds/tick2.wav";
@@ -18,9 +18,9 @@ export default function Metronome() {
     setTock(new Audio(tockSound));
   }, []);
 
-  const metronomeSoundHandler = () => {
+  const metronomeSoundHandler = useCallback(() => {
     tick && tick.play();
-  };
+  }, [tick]);
 
   const metronomeInputBlurHandler = () => {
     // 메트로놈 최소값이 1보다 작으면 1로 설정
