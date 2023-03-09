@@ -22,7 +22,7 @@ export default function Metronome() {
     tick && tick.play();
   }, [tick]);
 
-  const metronomeInputBlurHandler = () => {
+  const numberInputBlurHandler = () => {
     // 메트로놈 최소값이 1보다 작으면 1로 설정
     if (number < 1) {
       setNumber(1);
@@ -58,9 +58,21 @@ export default function Metronome() {
     }
   };
 
+  const numberInputKeyPressHandler = (
+    event: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    if (event.key === "Enter") {
+      event.currentTarget.blur();
+      let num = parseInt(event.currentTarget.value);
+      setNumber(num);
+
+      // 엔터키를 눌러서 blur 처리가 됐을때도 콘솔창에 number 값이 나와야함.
+    }
+  };
+
   useEffect(() => {
     console.log("현재 숫자 : ", number);
-  }, [number]);
+  }, [number, setNumber]);
 
   return (
     <>
@@ -72,7 +84,8 @@ export default function Metronome() {
         step={1}
         value={number}
         onChange={numberHandler}
-        onBlur={metronomeInputBlurHandler}
+        onBlur={numberInputBlurHandler}
+        onKeyDown={numberInputKeyPressHandler}
       />
       <p>현재 숫자 : {Number.isNaN(number) ? "" : number}</p>
     </>
