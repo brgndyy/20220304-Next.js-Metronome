@@ -11,6 +11,7 @@ export default function Metronome() {
   const [tick, setTick] = useState<HTMLAudioElement>();
   const [tock, setTock] = useState<HTMLAudioElement>();
   const [blur, setBlur] = useState(false);
+  let count = 1;
 
   // 초기 렌더링 당시에 메트로놈 사운드 설정해주기.
 
@@ -19,11 +20,15 @@ export default function Metronome() {
     setTock(new Audio(tockSound));
   }, []);
 
-  const metronomeSoundHandler = useCallback(() => {
+  const numberHandler = useCallback(() => {
     setPlaying(true);
+    console.log(count);
+    count++;
 
-    tick && tick.play();
-  }, [tick]);
+    if (count === 5) {
+      count = 1;
+    }
+  }, [count]);
 
   const focusHandler = () => {
     setBlur(false);
@@ -45,11 +50,11 @@ export default function Metronome() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      metronomeSoundHandler();
+      numberHandler();
     }, (60 / number) * 1000);
 
     return () => clearInterval(interval);
-  }, [number, metronomeSoundHandler]);
+  }, [number, numberHandler]);
 
   // const numberHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
   //   const num = parseInt(e.target.value);
@@ -101,9 +106,7 @@ export default function Metronome() {
         onKeyDown={numberInputKeyPressHandler}
       />
       <p>현재 숫자 : {Number.isNaN(number) ? "" : number}</p>
-      <button onClick={metronomeSoundHandler}>
-        {playing ? "일시정지" : "재생"}
-      </button>
+      <button onClick={numberHandler}>{playing ? "일시정지" : "재생"}</button>
     </>
   );
 }
