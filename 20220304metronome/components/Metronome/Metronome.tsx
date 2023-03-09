@@ -43,7 +43,7 @@ export default function Metronome() {
     }, (60 / bpm) * 1000);
 
     return () => clearInterval(interval);
-  }, [bpm]);
+  }, [bpm, metronomeSoundHandler]);
 
   const metronomeLoudnessHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const num = parseInt(e.target.value);
